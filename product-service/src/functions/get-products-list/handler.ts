@@ -1,11 +1,12 @@
-import productList from '../../product-list.json';
 import { middyfy } from '@libs/lambda';
 import {sendCustomResponse, sendError} from "../../utils/responses";
+import {cardService} from "../../card-service";
 
-const getCardList = async (_event) => {
+export const getCardList = async () => {
     try {
+        const cards = await cardService.getCardList();
         return sendCustomResponse({
-            cards: productList
+            cards
         }, 200)
     } catch (e) {
         return sendError(e);

@@ -1,11 +1,11 @@
-import productList from '../../product-list.json';
 import { middyfy } from '@libs/lambda';
 import {sendCustomResponse, sendError} from "../../utils/responses";
+import {cardService} from "../../card-service";
 
-const getCardById = async (event) => {
+export const getCardById = async (event) => {
     try {
         const cardId = event.pathParameters.id
-        const card = productList.find(card => card.id === cardId);
+        const card = await cardService.getCardById(cardId);
         if (!card) {
             return sendCustomResponse({ message: 'Card not found' }, 404)
         }
