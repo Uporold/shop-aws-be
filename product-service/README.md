@@ -13,7 +13,3 @@ First change directory ```cd product service```
 Run tests ```npm run test```
 
 Serverless deploy ```npm run service:deploy```
-
-
-
- 
