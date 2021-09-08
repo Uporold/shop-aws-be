@@ -5,7 +5,8 @@
   "main": "serverless.ts",
   "scripts": {
     "test": "jest",
-    "service:deploy": "sls deploy"
+    "service:deploy": "sls deploy",
+    "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f src/database/connection-options.ts"
   },
   "engines": {
     "node": ">=14.15.0"
@@ -13,16 +14,26 @@
   "dependencies": {
     "@middy/core": "^1.5.2",
     "@middy/http-json-body-parser": "^1.5.2",
-    "source-map-support": "^0.5.19"
+    "pg": "^8.7.1",
+    "reflect-metadata": "^0.1.13",
+    "source-map-support": "^0.5.19",
+    "typeorm": "^0.2.37"
   },
   "devDependencies": {
     "@serverless/typescript": "^2.23.0",
     "@types/aws-lambda": "^8.10.71",
     "@types/jest": "^27.0.1",
     "@types/node": "^14.14.25",
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "@typescript-eslint/parser": "^4.31.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.0.6",
     "json-schema-to-ts": "^1.5.0",
+    "prettier": "^2.3.2",
     "serverless": "^2.23.0",
+    "serverless-offline": "^8.1.0",
     "serverless-webpack": "^5.3.5",
     "ts-jest": "^27.0.5",
     "ts-loader": "^8.0.15",

@@ -1,13 +1,17 @@
+import { CardEntity } from '../entities/card.entity';
+import { CardDto } from '../dto/card.dto';
+
 export interface CardInterface {
-    id: string,
-    count: number,
-    price: number,
-    description: string,
-    title: string,
-    imageSrc: string,
+  id: string;
+  count: number;
+  price: number;
+  description: string;
+  title: string;
+  imageSrc: string;
 }
 
 export interface CardServiceInterface {
-    getCardList: () => Promise<CardInterface[]>,
-    getCardById: (id: string) => Promise<CardInterface>
+  getCardList: () => Promise<CardEntity[]>;
+  getCardById: (id: string) => Promise<CardEntity>;
+  createCard: (cardDto: CardDto) => Promise<CardEntity>;
 }
