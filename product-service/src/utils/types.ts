@@ -1,5 +1,5 @@
-import { CardEntity } from '../entities/card.entity';
-import { CardDto } from '../dto/card.dto';
+import { CardEntity } from "../entities/card.entity";
+import { CardDto } from "../dto/card.dto";
 
 export interface CardInterface {
   id: string;

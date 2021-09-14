@@ -3,8 +3,8 @@ import {
   ConnectionManager,
   createConnection,
   getConnectionManager,
-} from 'typeorm';
-import connectionOptions from './connection-options';
+} from "typeorm";
+import connectionOptions from "./connection-options";
 
 export class Database {
   private connectionManager: ConnectionManager;

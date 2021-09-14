@@ -1,9 +1,9 @@
 const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Credentials': true,
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Credentials": true,
 };
 export const sendCustomResponse = (body: unknown, statusCode: number) => {
-  console.log('Successfully finished');
+  console.log("Successfully finished");
   return {
     statusCode,
     headers,
@@ -17,7 +17,7 @@ export const sendError = (error: Error, statusCode = 500) => {
     statusCode,
     headers,
     body: JSON.stringify({
-      message: error.message || 'Something wrong, try again',
+      message: error.message || "Something wrong, try again",
     }),
   };
 };

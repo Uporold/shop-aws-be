@@ -5,12 +5,12 @@ import {
   JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
-} from 'typeorm';
-import { CardEntity } from './card.entity';
+} from "typeorm";
+import { CardEntity } from "./card.entity";
 
-@Entity('stock')
+@Entity("stock")
 export class StockEntity extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column()
@@ -20,6 +20,6 @@ export class StockEntity extends BaseEntity {
   @JoinColumn()
   card: CardEntity;
 
-  @Column({ type: 'uuid' })
+  @Column({ type: "uuid" })
   cardId: string;
 }

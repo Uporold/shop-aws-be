@@ -1,8 +1,8 @@
-import { CardServiceInterface } from '../utils/types';
-import { CardEntity } from '../entities/card.entity';
-import { Database } from '../database/database';
-import { CardDto } from '../dto/card.dto';
-import { StockEntity } from '../entities/stock.entity';
+import { CardServiceInterface } from "../utils/types";
+import { CardEntity } from "../entities/card.entity";
+import { Database } from "../database/database";
+import { CardDto } from "../dto/card.dto";
+import { StockEntity } from "../entities/stock.entity";
 
 class CardService implements CardServiceInterface {
   private database: Database;
@@ -14,7 +14,7 @@ class CardService implements CardServiceInterface {
     try {
       return await connection
         .getRepository(CardEntity)
-        .find({ relations: ['stock'] });
+        .find({ relations: ["stock"] });
     } finally {
       await connection.close();
     }
@@ -25,7 +25,7 @@ class CardService implements CardServiceInterface {
     try {
       return await connection
         .getRepository(CardEntity)
-        .findOne({ relations: ['stock'], where: { id: cardId } });
+        .findOne({ relations: ["stock"], where: { id: cardId } });
     } finally {
       await connection.close();
     }

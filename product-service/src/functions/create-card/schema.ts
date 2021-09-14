@@ -1,11 +1,11 @@
 export default {
-  type: 'object',
+  type: "object",
   properties: {
-    title: { type: 'string' },
-    description: { type: 'string' },
-    price: { type: 'number' },
-    count: { type: 'number' },
-    imgSrc: { type: 'string' },
+    title: { type: "string" },
+    description: { type: "string" },
+    price: { type: "number" },
+    count: { type: "number" },
+    imgSrc: { type: "string" },
   },
-  required: ['title', 'price', 'count'],
+  required: ["title", "price", "count"],
 } as const;
