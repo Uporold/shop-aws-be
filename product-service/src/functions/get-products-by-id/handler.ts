@@ -1,6 +1,6 @@
-import { middyfy } from "@libs/lambda";
-import { sendCustomResponse, sendError } from "../../utils/responses";
-import { cardService } from "../../services/card-service";
+import { middyfy } from '@libs/lambda';
+import { sendCustomResponse, sendError } from '../../utils/responses';
+import { cardService } from '../../services/card-service';
 
 export const getCardById = async (event) => {
   try {
@@ -9,7 +9,7 @@ export const getCardById = async (event) => {
     const card = await cardService.getCardById(cardId);
     console.log(`Received card: ${JSON.stringify(card)}`);
     if (!card) {
-      return sendCustomResponse({ message: "Card not found" }, 404);
+      return sendCustomResponse({ message: 'Card not found' }, 404);
     }
     return sendCustomResponse(card, 200);
   } catch (e) {

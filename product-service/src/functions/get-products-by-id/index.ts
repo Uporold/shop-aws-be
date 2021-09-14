@@ -1,12 +1,12 @@
-import { handlerPath } from "@libs/handlerResolver";
+import { handlerPath } from '@libs/handlerResolver';
 
 export default {
   handler: `${handlerPath(__dirname)}/handler.getProductById`,
   events: [
     {
       http: {
-        method: "get",
-        path: "products/{id}",
+        method: 'get',
+        path: 'products/{id}',
         cors: true,
       },
     },

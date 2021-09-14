@@ -1,6 +1,6 @@
-import { ConnectionOptions } from "typeorm";
-import { CardEntity } from "../entities/card.entity";
-import { StockEntity } from "../entities/stock.entity";
+import { ConnectionOptions } from 'typeorm';
+import { CardEntity } from '../entities/card.entity';
+import { StockEntity } from '../entities/stock.entity';
 
 const connectionOptions: ConnectionOptions = {
   name: `default`,
@@ -12,9 +12,9 @@ const connectionOptions: ConnectionOptions = {
   database: process.env.DB_NAME,
   password: process.env.DB_PASSWORD,
   entities: [CardEntity, StockEntity],
-  migrations: ["src/migrations/*.ts"],
+  migrations: ['src/migrations/*.ts'],
   cli: {
-    migrationsDir: "src/migrations",
+    migrationsDir: 'src/migrations',
   },
 };
 

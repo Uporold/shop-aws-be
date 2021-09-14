@@ -1,6 +1,6 @@
-import { middyfy } from "@libs/lambda";
-import { sendCustomResponse, sendError } from "../../utils/responses";
-import { cardService } from "../../services/card-service";
+import { middyfy } from '@libs/lambda';
+import { sendCustomResponse, sendError } from '../../utils/responses';
+import { cardService } from '../../services/card-service';
 
 export const getCardList = async (event) => {
   try {

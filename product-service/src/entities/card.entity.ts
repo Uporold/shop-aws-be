@@ -6,13 +6,13 @@ import {
   Entity,
   OneToOne,
   PrimaryGeneratedColumn,
-} from "typeorm";
-import { StockEntity } from "./stock.entity";
-import { cardBack } from "../utils/const";
+} from 'typeorm';
+import { StockEntity } from './stock.entity';
+import { cardBack } from '../utils/const';
 
-@Entity("card")
+@Entity('card')
 export class CardEntity extends BaseEntity {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
