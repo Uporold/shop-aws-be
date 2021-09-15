@@ -2,6 +2,7 @@ import type { AWS } from '@serverless/typescript';
 import dotenv from 'dotenv';
 dotenv.config();
 import importProductsFile from '@functions/import-products-file';
+import { importFileParser } from '@functions/index';
 
 const serverlessConfiguration: AWS = {
   service: 'import-service',
@@ -81,7 +82,7 @@ const serverlessConfiguration: AWS = {
   },
 
   // import the function via paths
-  functions: { importProductsFile },
+  functions: { importProductsFile, importFileParser },
 };
 
 module.exports = serverlessConfiguration;
