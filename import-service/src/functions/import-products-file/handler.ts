@@ -3,7 +3,7 @@ import * as AWS from 'aws-sdk';
 import { middyfy } from '@libs/lambda';
 import { sendCustomResponse, sendError } from '../../utils/responses';
 
-const importProductsFile = async (event) => {
+export const importProductsFile = async (event) => {
   try {
     const s3 = new AWS.S3({ region: 'eu-west-1' });
 
@@ -19,7 +19,6 @@ const importProductsFile = async (event) => {
     const url = await s3.getSignedUrlPromise('putObject', params);
     return sendCustomResponse({ url }, 200);
   } catch (error) {
-    console.error(error);
     return sendError(error);
   }
 };
