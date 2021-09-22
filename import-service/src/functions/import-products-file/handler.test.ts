@@ -21,6 +21,7 @@ describe('import products file lambda handler tests', () => {
     AWSMock.mock('S3', 'getSignedUrl', mockUrl);
     const res = await importProductsFile(event);
     expect(JSON.parse(res.body).url).toEqual(mockUrl);
+    expect(res.statusCode).toBe(200);
   });
 
   it('should get error message if sign function throw error', async () => {

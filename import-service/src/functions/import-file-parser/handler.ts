@@ -1,13 +1,13 @@
 import 'source-map-support/register';
 import { middyfy } from '@libs/lambda';
-import { sendError } from '../../utils/responses';
+import { sendCustomResponse, sendError } from '../../utils/responses';
 import * as AWS from 'aws-sdk';
 import csvParser from 'csv-parser';
 
 const importFileParser = async (event) => {
   try {
     const s3 = new AWS.S3({ region: 'eu-west-1' });
-    const tables = [];
+    const rows = [];
     event.Records.forEach((record) => {
       const params = {
         Bucket: process.env.BUCKET_NAME,
@@ -19,13 +19,13 @@ const importFileParser = async (event) => {
         .pipe(csvParser())
         .on('data', (data) => {
           console.log(`Data event: ${JSON.stringify(data)}`);
-          tables.push(data);
+          rows.push(data);
         })
         .on('error', (error) => {
           console.log(error);
         })
         .on('end', async () => {
-          console.log(`End event data: ${JSON.stringify(tables)}`);
+          console.log(`End event data: ${JSON.stringify(rows)}`);
           await s3
             .copyObject(
               Object.assign(
@@ -47,6 +47,7 @@ const importFileParser = async (event) => {
           );
         });
     });
+    return sendCustomResponse({ message: 'OK' }, 200);
   } catch (error) {
     return sendError(error);
   }
