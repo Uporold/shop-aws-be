@@ -1,8 +1,7 @@
 import type { AWS } from '@serverless/typescript';
 import dotenv from 'dotenv';
 dotenv.config();
-import importProductsFile from '@functions/import-products-file';
-import { importFileParser } from '@functions/index';
+import { importFileParser, importProductsFile } from '@functions/index';
 
 const serverlessConfiguration: AWS = {
   service: 'import-service',
@@ -26,6 +25,10 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       BUCKET_NAME: process.env.BUCKET_NAME,
+      SQS_QUEUE_NAME: process.env.SQS_QUEUE_NAME,
+      SQS_QUEUE_URL: {
+        Ref: 'SQSQueue',
+      },
     },
     lambdaHashingVersion: '20201221',
     iamRoleStatements: [
@@ -38,6 +41,13 @@ const serverlessConfiguration: AWS = {
         Effect: 'Allow',
         Action: 's3:*',
         Resource: `arn:aws:s3:::${process.env.BUCKET_NAME}/*`,
+      },
+      {
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: {
+          'Fn::GetAtt': ['SQSQueue', 'Arn'],
+        },
       },
     ],
   },
@@ -76,6 +86,19 @@ const serverlessConfiguration: AWS = {
               },
             },
           },
+        },
+      },
+      SQSQueue: {
+        Type: 'AWS::SQS::Queue',
+        Properties: {
+          QueueName: process.env.SQS_QUEUE_NAME,
+        },
+      },
+    },
+    Outputs: {
+      SQSArn: {
+        Value: {
+          'Fn::GetAtt': ['SQSQueue', 'Arn'],
         },
       },
     },
