@@ -34,8 +34,42 @@ const serverlessConfiguration: AWS = {
       DB_NAME: process.env.DB_NAME,
       DB_USERNAME: process.env.DB_USERNAME,
       DB_PASSWORD: process.env.DB_PASSWORD,
+      SNS_TOPIC_NAME: process.env.SNS_TOPIC_NAME,
+      SNS_SUBSCRIPTION_EMAIL: process.env.SNS_SUBSCRIPTION_EMAIL,
+      SNS_TOPIC_ARN: {
+        Ref: 'SNSTopic',
+      },
     },
     lambdaHashingVersion: '20201221',
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: 'sns:*',
+        Resource: {
+          Ref: 'SNSTopic',
+        },
+      },
+    ],
+  },
+  resources: {
+    Resources: {
+      SNSTopic: {
+        Type: 'AWS::SNS::Topic',
+        Properties: {
+          TopicName: process.env.SNS_TOPIC_NAME,
+        },
+      },
+      SNSSubscription: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Endpoint: process.env.SNS_SUBSCRIPTION_EMAIL,
+          Protocol: 'email',
+          TopicArn: {
+            Ref: 'SNSTopic',
+          },
+        },
+      },
+    },
   },
   // import the function via paths
   functions: {
