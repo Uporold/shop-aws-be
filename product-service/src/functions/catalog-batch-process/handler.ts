@@ -18,6 +18,12 @@ export const catalogBatchProcess = async (event) => {
           Subject: `Card with id ${newCard.id} created successfully`,
           Message: JSON.stringify(newCard),
           TopicArn: process.env.SNS_TOPIC_ARN,
+          MessageAttributes: {
+            count: {
+              DataType: 'Number',
+              StringValue: newCard.count.toString(),
+            },
+          },
         },
         (error, data) => {
           if (error) console.log(error);

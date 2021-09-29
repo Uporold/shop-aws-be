@@ -69,6 +69,19 @@ const serverlessConfiguration: AWS = {
           },
         },
       },
+      SNSSubscriptionFilterByCount: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Endpoint: process.env.SNS_SUBSCRIPTION_EMAIL_FILTER_COUNT,
+          Protocol: 'email',
+          TopicArn: {
+            Ref: 'SNSTopic',
+          },
+          FilterPolicy: {
+            count: [{ numeric: ['>=', 12] }],
+          },
+        },
+      },
     },
   },
   // import the function via paths
