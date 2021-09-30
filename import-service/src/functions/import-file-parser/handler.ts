@@ -10,7 +10,7 @@ const importFileParser = async (event) => {
     const sqs = new AWS.SQS({ region: 'eu-west-1' });
 
     const rows = [];
-    for (const record of event.Records) {
+    for await (const record of event.Records) {
       const params = {
         Bucket: process.env.BUCKET_NAME,
         Key: record.s3.object.key,
@@ -19,36 +19,35 @@ const importFileParser = async (event) => {
       s3.getObject(params)
         .createReadStream()
         .pipe(csvParser())
-        .on('data', (row) => {
+        .on('data', async (row) => {
           console.log(`Data event: ${JSON.stringify(row)}`);
-          sqs.sendMessage(
-            {
-              QueueUrl: process.env.SQS_QUEUE_URL,
-              MessageBody: JSON.stringify(row),
-            },
-            (error, data) => {
-              if (error) console.log(`SQS error ${error}`);
-              console.log(`SQS data ${JSON.stringify(data)}`);
-            }
-          );
           rows.push(row);
+          try {
+            await sqs
+              .sendMessage({
+                QueueUrl: process.env.SQS_QUEUE_URL,
+                MessageBody: JSON.stringify(row),
+              })
+              .promise();
+          } catch (e) {
+            console.log(
+              `Error while sending data message: ${JSON.stringify(
+                row
+              )}. Error: ${e}`
+            );
+          }
         })
         .on('error', (error) => {
-          console.log(error);
+          console.log(`Pipe error ${error}`);
         })
         .on('end', async () => {
           console.log(`End event data: ${JSON.stringify(rows)}`);
           await s3
-            .copyObject(
-              Object.assign(
-                {},
-                {
-                  ...params,
-                  CopySource: `${params.Bucket}/${params.Key}`,
-                  Key: params.Key.replace('uploads', 'parsed'),
-                }
-              )
-            )
+            .copyObject({
+              Bucket: process.env.BUCKET_NAME,
+              CopySource: `${params.Bucket}/${params.Key}`,
+              Key: params.Key.replace('uploads', 'parsed'),
+            })
             .promise();
 
           await s3.deleteObject(params).promise();

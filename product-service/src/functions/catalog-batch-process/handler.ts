@@ -1,9 +1,35 @@
 import { cardService } from '../../services/card-service';
 import { SNS } from 'aws-sdk';
-import { sendCustomResponse, sendError } from '../../utils/responses';
 import { middyfy } from '@libs/lambda';
+import { SQSHandler } from 'aws-lambda';
 
-export const catalogBatchProcess = async (event) => {
+export const handleSingleProductProcess = async (
+  sns: SNS,
+  recordBody: string
+) => {
+  try {
+    const card = await cardService.createCard(JSON.parse(recordBody));
+    console.log(`Card saved: ${recordBody}`);
+    const response = await sns
+      .publish({
+        Subject: `Card with id ${card.id} created successfully`,
+        Message: JSON.stringify(card),
+        TopicArn: process.env.SNS_TOPIC_ARN,
+        MessageAttributes: {
+          count: {
+            DataType: 'Number',
+            StringValue: card.count.toString(),
+          },
+        },
+      })
+      .promise();
+    console.log(`Send email with data: ${JSON.stringify(response)}`);
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const catalogBatchProcess: SQSHandler = async (event) => {
   try {
     console.log(`Event: ${JSON.stringify(event)}`);
     const sns = new SNS();
@@ -11,29 +37,10 @@ export const catalogBatchProcess = async (event) => {
     console.log(`Cards to save: ${cards}`);
     for (const card of cards) {
       console.log(JSON.parse(card));
-      const newCard = await cardService.createCard(JSON.parse(card));
-      console.log(`Card saved: ${card}`);
-      sns.publish(
-        {
-          Subject: `Card with id ${newCard.id} created successfully`,
-          Message: JSON.stringify(newCard),
-          TopicArn: process.env.SNS_TOPIC_ARN,
-          MessageAttributes: {
-            count: {
-              DataType: 'Number',
-              StringValue: newCard.count.toString(),
-            },
-          },
-        },
-        (error, data) => {
-          if (error) console.log(error);
-          else console.log(`Send email with data: ${JSON.stringify(data)}`);
-        }
-      );
+      await handleSingleProductProcess(sns, card);
     }
-    return sendCustomResponse({ message: 'Success batch' }, 200);
   } catch (e) {
-    return sendError(e);
+    console.log(`Error during catalogBatchProcess: ${e}`);
   }
 };
 
