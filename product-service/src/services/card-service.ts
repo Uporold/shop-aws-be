@@ -20,7 +20,7 @@ class CardService implements CardServiceInterface {
     }
   }
 
-  async getCardById(cardId: string): Promise<CardEntity> {
+  async getCardById(cardId: string): Promise<CardEntity | undefined> {
     const connection = await this.database.getConnection();
     try {
       return await connection

@@ -1,9 +1,8 @@
 import { middyfy } from '@libs/lambda';
 import { sendCustomResponse, sendError } from '../../utils/responses';
 import { cardService } from '../../services/card-service';
-import { APIGatewayProxyHandler } from 'aws-lambda';
 
-export const getCardList: APIGatewayProxyHandler = async (event) => {
+export const getCardList = async (event) => {
   try {
     console.log(`Get all cards event: ${JSON.stringify(event)}`);
     const cards = await cardService.getCardList();

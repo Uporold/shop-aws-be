@@ -1,9 +1,8 @@
 import { middyfy } from '@libs/lambda';
 import { sendCustomResponse, sendError } from '../../utils/responses';
 import { cardService } from '../../services/card-service';
-import { APIGatewayProxyHandler } from 'aws-lambda';
 
-export const getCardById: APIGatewayProxyHandler = async (event) => {
+export const getCardById = async (event) => {
   try {
     console.log(`Get card by id event: ${JSON.stringify(event)}`);
     const cardId = event.pathParameters.id;
