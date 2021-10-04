@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "service:deploy": "sls deploy",
-    "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f src/database/connection-options.ts"
+    "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f src/database/connection-options.ts",
+    "migrations:run": "npm run typeorm:cli -- migration:run"
   },
   "engines": {
     "node": ">=14.15.0"

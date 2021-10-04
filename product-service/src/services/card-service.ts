@@ -38,14 +38,12 @@ class CardService implements CardServiceInterface {
     await queryRunner.startTransaction();
     try {
       const { title, description, price, imageSrc, count } = body;
-      const card = connection
+      const card = await queryRunner.manager
         .getRepository(CardEntity)
-        .create({ title, description, price, imageSrc });
-      await card.save();
-      const stock = queryRunner.manager
+        .save({ title, description, price, imageSrc });
+      await queryRunner.manager
         .getRepository(StockEntity)
-        .create({ count, cardId: card.id });
-      await stock.save();
+        .save({ count, cardId: card.id });
       await queryRunner.commitTransaction();
       card.count = count;
       return card;

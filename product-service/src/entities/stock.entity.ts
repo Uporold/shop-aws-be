@@ -16,7 +16,7 @@ export class StockEntity extends BaseEntity {
   @Column()
   count: number;
 
-  @OneToOne(() => CardEntity, (card) => card.stock)
+  @OneToOne(() => CardEntity, (card) => card.stock, { onDelete: 'CASCADE' })
   @JoinColumn()
   card: CardEntity;
 

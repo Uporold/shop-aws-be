@@ -25,7 +25,7 @@ export const handleSingleProductProcess = async (
       .promise();
     console.log(`Send email with data: ${JSON.stringify(response)}`);
   } catch (e) {
-    throw e;
+    console.log(`Error in handleSingleProductProcess: ${e}`);
   }
 };
 
