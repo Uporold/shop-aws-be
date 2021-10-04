@@ -85,7 +85,7 @@ describe('catalogBatchProcess', () => {
     await catalogBatchProcess(event, null, null);
     expect(SNSPublish).toHaveBeenCalledTimes(0);
     expect(consoleLogSpy).toHaveBeenCalledWith(
-      'Error during catalogBatchProcess: Error: Oops'
+      'Error in handleSingleProductProcess: Error: Oops'
     );
   });
 });
