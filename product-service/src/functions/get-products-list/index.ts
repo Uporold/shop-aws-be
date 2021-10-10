@@ -8,6 +8,12 @@ export default {
         method: 'get',
         path: 'products',
         cors: true,
+        authorizer: {
+          name: 'cognitoAuthorizer',
+          arn: '${cf:authorization-service-dev.cognitoUserPoolArn}',
+          identitySource: 'method.request.header.Authorization',
+          type: 'COGNITO_USER_POOLS',
+        },
       },
     },
   ],

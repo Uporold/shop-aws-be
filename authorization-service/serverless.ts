@@ -24,6 +24,9 @@ const serverlessConfiguration: AWS = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      USER_POOL_NAME: process.env.USER_POOL_NAME,
+      USER_POOL_CLIENT_NAME: process.env.USER_POOL_CLIENT_NAME,
+      USER_POOL_DOMAIN: process.env.USER_POOL_DOMAIN,
       uporold: process.env.uporold,
     },
     lambdaHashingVersion: '20201221',
@@ -31,10 +34,77 @@ const serverlessConfiguration: AWS = {
   // import the function via paths
   functions: { basicAuthorizer },
   resources: {
+    Resources: {
+      CognitoUserPool: {
+        Type: 'AWS::Cognito::UserPool',
+        Properties: {
+          UserPoolName: process.env.USER_POOL_NAME,
+          AliasAttributes: ['email'],
+          AutoVerifiedAttributes: ['email'],
+          UsernameConfiguration: {
+            CaseSensitive: false,
+          },
+          AccountRecoverySetting: {
+            RecoveryMechanisms: [
+              {
+                Name: 'verified_email',
+                Priority: 1,
+              },
+            ],
+          },
+          Schema: [
+            {
+              Name: 'email',
+              Required: true,
+            },
+          ],
+          Policies: {
+            PasswordPolicy: {
+              MinimumLength: 6,
+            },
+          },
+        },
+      },
+      CognitoUserPoolClient: {
+        Type: 'AWS::Cognito::UserPoolClient',
+        Properties: {
+          ClientName: process.env.USER_POOL_CLIENT_NAME,
+          GenerateSecret: false,
+          CallbackURLs: ['https://d2rqboly45oeob.cloudfront.net/'],
+          AllowedOAuthScopes: [
+            'phone',
+            'email',
+            'openid',
+            'profile',
+            'aws.cognito.signin.user.admin',
+          ],
+          AllowedOAuthFlows: ['implicit'],
+          AllowedOAuthFlowsUserPoolClient: true,
+          SupportedIdentityProviders: ['COGNITO'],
+          UserPoolId: {
+            Ref: 'CognitoUserPool',
+          },
+        },
+      },
+      CognitoUserPoolDomain: {
+        Type: 'AWS::Cognito::UserPoolDomain',
+        Properties: {
+          Domain: process.env.USER_POOL_DOMAIN,
+          UserPoolId: {
+            Ref: 'CognitoUserPool',
+          },
+        },
+      },
+    },
     Outputs: {
       basicAuthorizerArn: {
         Value: {
           'Fn::GetAtt': ['BasicAuthorizerLambdaFunction', 'Arn'],
+        },
+      },
+      cognitoUserPoolArn: {
+        Value: {
+          'Fn::GetAtt': ['CognitoUserPool', 'Arn'],
         },
       },
     },
