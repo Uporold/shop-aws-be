@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "service:deploy": "sls deploy",
-    "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f src/database/connection-options.ts"
+    "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f src/database/connection-options.ts",
+    "migrations:run": "npm run typeorm:cli -- migration:run"
   },
   "engines": {
     "node": ">=14.15.0"
@@ -26,10 +27,12 @@
     "@types/node": "^14.14.25",
     "@typescript-eslint/eslint-plugin": "^4.31.0",
     "@typescript-eslint/parser": "^4.31.0",
+    "aws-sdk-mock": "^5.4.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.0.6",
+    "jest-mock-extended": "^2.0.4",
     "json-schema-to-ts": "^1.5.0",
     "prettier": "^2.3.2",
     "serverless": "^2.23.0",

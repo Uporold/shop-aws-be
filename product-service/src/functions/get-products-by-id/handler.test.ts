@@ -1,5 +1,6 @@
 import { getCardById } from '@functions/get-products-by-id/handler';
 import { cardService } from '../../services/card-service';
+import { CardEntity } from '../../entities/card.entity';
 
 const mockResult = {
   count: 6,
@@ -19,6 +20,9 @@ const event = {
 
 describe('get card by id tests', () => {
   it('should get card by id', async () => {
+    cardService.getCardById = jest.fn(async () => {
+      return mockResult as CardEntity;
+    });
     const result = await getCardById(event);
     expect(JSON.parse(result.body)).toEqual(mockResult);
     expect(result.statusCode).toBe(200);
@@ -30,6 +34,9 @@ describe('get card by id tests', () => {
         id: 'over9000',
       },
     };
+    cardService.getCardById = jest.fn(async () => {
+      return undefined;
+    });
     const result = await getCardById(event);
     expect(JSON.parse(result.body)).toEqual({ message: 'Card not found' });
     expect(result.statusCode).toBe(404);
