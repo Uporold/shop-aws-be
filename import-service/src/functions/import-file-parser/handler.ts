@@ -10,7 +10,7 @@ const importFileParser = async (event) => {
     const sqs = new AWS.SQS({ region: 'eu-west-1' });
 
     const rows = [];
-    for await (const record of event.Records) {
+    for (const record of event.Records) {
       const params = {
         Bucket: process.env.BUCKET_NAME,
         Key: record.s3.object.key,
