@@ -27,7 +27,10 @@ export class AppService {
       return await this.httpService.axiosRef.request(axiosConfig);
     } catch (e) {
       if (e.response) {
-        throw new HttpException(e.message, e.response.status);
+        throw new HttpException(
+          e.response.data.message || e.message,
+          e.response.status,
+        );
       }
       throw new InternalServerErrorException(e.message);
     }

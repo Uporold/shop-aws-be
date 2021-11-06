@@ -14,7 +14,7 @@ export class CustomCacheInterceptor extends CacheInterceptor {
   ): Promise<Observable<any>> {
     const req = context.switchToHttp().getRequest();
     const recipient = req.params.recipient;
-    console.log(req.params.recipient);
+    console.log(req.params);
     const isCacheable =
       req.method === 'GET' &&
       process.env[`${recipient}_is_cacheable`] === 'true' &&
