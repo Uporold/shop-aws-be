@@ -8,14 +8,17 @@ import {
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CustomCacheInterceptor } from './custom-cache.interceptor';
+import { PathInterceptor } from './path.interceptor';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @UseInterceptors(CustomCacheInterceptor)
-  @All(['/:recipient', '/:recipient/:id'])
+  @UseInterceptors(CustomCacheInterceptor, PathInterceptor)
+  @All(['/:recipient', '/:recipient/:id', '/:recipient/*'])
   async bff(@Req() req, @Param('recipient') recipient) {
+    console.log('recipient', recipient);
+    console.log('originalUrl', req.originalUrl);
     if (process.env[recipient]) {
       const { data } = await this.appService.sendRequest(
         req.method,
